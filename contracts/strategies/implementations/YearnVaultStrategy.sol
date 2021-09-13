@@ -3,27 +3,24 @@
 pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
 
-import {BaseStrategy as BentoBaseStrategy} from "./BaseStrategy.sol";
-import "../interfaces/IBentoBoxMinimal.sol";
-import "@boringcrypto/boring-solidity/contracts/libraries/BoringERC20.sol";
+import {BaseStrategy as BentoBaseStrategy} from "../BaseStrategy.sol";
 import {
     BaseWrapper as YearnBaseWrapper
 } from "@yearn/yearn-vaults/contracts/BaseWrapper.sol";
 
 contract YearnVaultStrategy is YearnBaseWrapper, BentoBaseStrategy {
-    using BoringERC20 for IERC20;
 
     constructor(
-        IERC20 _underlying,
+        address _token,
         address _yRegistry,
-        IBentoBoxMinimal _bentoBox,
+        address _bentoBox,
         address _strategyExecutor
     )
         public
-        YearnBaseWrapper(address(_underlying), _yRegistry)
+        YearnBaseWrapper(_token, _yRegistry)
         BentoBaseStrategy(
             BentoBaseStrategy.BaseStrategyParams(
-                _underlying,
+                _token,
                 _bentoBox,
                 _strategyExecutor,
                 address(0), // no rewards, so factory is not needed
